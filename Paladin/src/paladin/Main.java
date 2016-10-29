@@ -9,57 +9,55 @@ import javax.swing.JOptionPane;
 public class Main {
 
 public static void main(String[] args) {
-    int potions = 2;
-    int sword = 1;
-    double speed = 0;
-    double buffer_speed = 0;
-    double defence = 0;
-    double friend_defence = 0;
-    double buffer_defence = 0;
-    double attak = 0;
-    double buffer_attak = 0;
-    double damage = 10;
-    double hp = 100;
-    double friend_hp = 70;
-    double Maximillian_hp = 70;
-    double guardian_hp = 50;
-    double guardian_attak = 10;
-    double guardian_damage = 10;
-    double Maximillian_damage = 10;
-    double guardian_defence = 10;
-    double guardian_speed = 20;
-    double monster_hp = 50;
-    double monster_base_hp = 50;
-    double monster_attak = 10;
-    double monster_damage = 10;
-    double monster_defence = 10;
-    double monster_speed = 20;
-    double current_damage = 0;
-    double monster_buffer_attak = 10;
-    double monster_buffer_defence = 10;
-    double monster_buffer_speed = 20;
-    double monster_current_damage = 0;
-    double blocked_damage = 0;
-    double monster_blocked_damage = 0;
-    double guardian_blocked_damage = 0;
-    int choose;
-    int goblinsLeft = 6;
-    int goblinsKilled = 0;
-    int guardiansLeft = 6;
-    int healed_hp = 0;
-    int AuroraAction = 1;
-    int GuardianAction = 1;
-    int MaximillianAction = 1;
-    boolean isAuroraHitted = false;
-    boolean isMaximillianHitted = false;
-    boolean isGuardianHitted = false;
-    boolean isLetterSend = false;
-    boolean isWin = false;
-    boolean isArmourPikedUp = false;
-    String name;
-    String flang = "левый";
-    String answer;
-    Random rand = new Random();
+    int potions = 2;//Кол-во зелий
+    int sword = 1;//Номер выбранного меча
+    double speed = 0;//Шанс уклониться
+    double buffer_speed = 0;//Бафф от Авроры на шанс уклонится
+    double defence = 0;//Процент отраженного урона
+    double buffer_defence = 0;//Бафф от Авроры на процент отражённого урона
+    double attak = 0;//Процент от урона, прибавляемый к основному значению
+    double buffer_attak = 0;//Бафф от Авроры на процент от урона
+    double damage = 10;//Повреждения противнику
+    double guardian_buffer_damage = 0;//Буферная переменная для подсчёта урона от одного стража за один ход
+    double hp = 100;//Жизнь персонажа
+    double friend_hp = 70;//Жизнь Авроры
+    double Maximillian_hp = 70;//Жизнь магистра Максимиллиана
+    double guardian_hp = 50;//Жизнь одного стражника
+    double guardian_attak = 10;//Процент от урона у любого из стражников
+    double guardian_damage = 10;//Урон любого из стражников
+    double Maximillian_damage = 10;//Урон меча магистра Максимиллиана
+    double guardian_defence = 10;//Процент отражённого урона любого стражника
+    double guardian_speed = 20;//Шанс уклониться для любого стражника
+    double monster_hp = 50;//Жизнь любого противника. В последнем бою - переменная жизни для всех врагов.
+    double monster_base_hp = 50;//Независимое от уровня значение жизни врага
+    double monster_attak = 10;//Процент от урона любого врага
+    double monster_damage = 10;//Урон любого врага
+    double monster_defence = 10;//Процент отражённого урона любого врага
+    double monster_speed = 20;//Шанс уклонится для любого врага
+    double current_damage = 0;//Буфер последнего удара персонажа
+    double monster_buffer_attak = 0;//Дебафф для противника от Авроры по проценту от урона
+    double monster_buffer_defence = 0;////Дебафф для противника от Авроры по проценту отражённого урона
+    double monster_current_damage = 0;//Буфер последнего удара врага
+    double blocked_damage = 0;//Последний заблокированный урон
+    double monster_buffer_speed = 0;
+    double monster_blocked_damage = 0;//Последний заблокированный урон врага
+    double guardian_blocked_damage = 0;//Последний заблокированный урон стражника
+    int choose;//Выбранный вариант ответа пользователя
+    int goblinsLeft = 6;//Сколько гоблинов осталось в живых
+    int goblinsKilled = 0;//Сколько гоблинов убито
+    int guardiansLeft = 6;//Сколько стражников осталось в живых
+    int healed_hp = 0;//Буфер восстановленной жизни
+    int AuroraAction = 1;//Случайное решение Авроры
+    int MaximillianAction = 1;//Случайное действие Максимиллиана
+    int WhoWasEnchanted = 1;//Номер человека в отряде, на кого Аврора накладывает заклинание
+    boolean isLetterSend = false;//Флаг того, выслано ли письмо
+    boolean isWin = false;//Флаг выхода из последней битвы при победе
+    boolean isArmourPikedUp = false;//Флаг посещения оружейной Немус-Мортема
+    int WhoWasHitted = 1;//Номер человека в отряде, который был атакован врагом
+    String name;//Имя пользователя
+    String flang = "левый";//Текущий фланг обороны
+    String answer;//Ответ на ключевой вопрос Немус-Мортема
+    Random rand = new Random();//Генератор случайных чисел
     int metadata;
 name = JOptionPane.showInputDialog(null,"Доброго времени суток, воин Солнца и Света!"
                                  + "\nНазови себя!");
@@ -255,6 +253,7 @@ JOptionPane.showMessageDialog(null,"На тропу выходит тень. О�
                                  + "\nантропоморфная тварь. Она явно дождалась сумерек,"
                                  + "\nпрежде чем напасть. К оружию!");
 
+//Вход в бой с оборотнем, пока один из противников не будет убит
 while(monster_hp>0&&hp>0){
 choose = Integer.parseInt(JOptionPane.showInputDialog(null,"Оборотень атакует!"
                                                          + "\nОн пытается ударить тебя"
@@ -266,6 +265,7 @@ choose = Integer.parseInt(JOptionPane.showInputDialog(null,"Оборотень �
                                                          + "\n5)- Выпить зелье лечения (x"+potions+")"
                                                          + "\nP.S. Удары латной перчаткой"
                                                          + "\nили сапогом могут оглушить врага"));
+//Если случайное число от 0 до (100-скорость) = 1, то противник промахнётся
 if(rand.nextInt((int)(100-speed))!=1){
 monster_current_damage = (monster_attak/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
 monster_blocked_damage = monster_damage*(defence/100);
@@ -398,10 +398,10 @@ JOptionPane.showMessageDialog(null,"Ты вбегаешь на поляну, о�
                                  + "\nлечение, её нужно увести отсюда! Вперёд!");
 for(int i = 0; i<6; i++){
 monster_hp=monster_base_hp;
+//Каждый раз, когда противник погибает, происходит сброс баффа от Авроры на коэффиценты
 if(buffer_attak!=0){
 buffer_attak = 0;
 attak = attak - buffer_attak;
-//monster_damage
 }
 if(buffer_defence!=0){
 buffer_defence = 0;
@@ -411,6 +411,7 @@ if(buffer_speed!=0){
 buffer_speed = 0;
 speed = speed - buffer_speed;
 }
+//Битва продолжается, пока все трое живы
 while(monster_hp>0&&hp>0&&friend_hp>0){
 choose = Integer.parseInt(JOptionPane.showInputDialog(null,"Гоблин кидается на вас с Авророй,"
                                                          + "\nзащищайтесь!"
@@ -427,6 +428,7 @@ AuroraAction=rand.nextInt(6);
 if(AuroraAction==1&&hp<85){
 healed_hp = rand.nextInt(7)+3;
 hp = hp + healed_hp;
+WhoWasHitted = rand.nextInt()+1;
 JOptionPane.showMessageDialog(null, "Аврора залечивает твои раны!(+"+healed_hp+" жизни)");
 }else if(AuroraAction==1){
 monster_buffer_attak = monster_attak - monster_attak/2;
@@ -462,8 +464,8 @@ buffer_defence = defence/3;
 defence = defence + buffer_defence;
 JOptionPane.showMessageDialog(null, "Аврора повышает прочность твоей брони на "+(int)buffer_attak+"!(до конца боя)");
 }
-isAuroraHitted = rand.nextBoolean();
-if(!isAuroraHitted){
+//В зависимости от того, кто был атакован, ты или Аврора получаете урон
+if(WhoWasHitted==1){
 if(rand.nextInt((int)(100 - speed))!=1){
 monster_current_damage = (monster_attak/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
 monster_blocked_damage = monster_damage*(defence/100);
@@ -539,7 +541,7 @@ current_damage = 0;
 blocked_damage = 0;
 JOptionPane.showMessageDialog(null,"Гоблин увернулся от удара!");
 }
-if(!isAuroraHitted){
+if(WhoWasHitted==1){
 JOptionPane.showMessageDialog(null,"Ты нанёс "+(int)current_damage+" урона,"
                                  + "\nПротивник нанёс тебе "+(int)monster_current_damage+" урона,"
                                  + "\nИз них ты заблокировал " + (int)monster_blocked_damage+" урона"
@@ -557,6 +559,7 @@ JOptionPane.showMessageDialog(null,"Ты нанёс "+(int)current_damage+" ур
                                  + "\nА у Авроры " +(int)friend_hp+".");
     }
 }
+//Если кто-то из вас троих погиб, цикл заканчивается, и начинается проверка кто именно
 if(friend_hp<=0){
 JOptionPane.showMessageDialog(null,"Хрупкая Аврора Чиаро падает, пронзённая клинком гоблина."
                                  + "\nО чёрт.. Этого не должно было случится, "
@@ -566,6 +569,7 @@ System.exit(0);
 if(hp>0){
 JOptionPane.showMessageDialog(null,"Этот гоблин мёртв! Осталось ещё "+(6-i));
 }else{
+//Два разных варианта смерти героя
     if(rand.nextBoolean()){
 JOptionPane.showMessageDialog(null,"Чёрный кривой клинок гоблина пробил твою броню."
                                  + "\nМир погружается во тьму..."
@@ -580,6 +584,7 @@ JOptionPane.showMessageDialog(null,"Ты пропустил удар, и чёр�
 System.exit(0);
 }
 }
+//Сброс баффа от Авроры
 if(buffer_attak!=0){
 buffer_attak = 0;
 attak = attak - buffer_attak;
@@ -655,8 +660,8 @@ JOptionPane.showMessageDialog(null,"Страж ворот: Итак, вопро�
                                  + "\nтитул, и то имя, под которым любого рыцаря"
                                  + "\nОрдена знают простолюдины. Кто ты?");
 answer = JOptionPane.showInputDialog(null,"Я - ...");
-int i = 1;
-while(!answer.equals("Паладин")){
+//Загадка для входа в Немус-Мортем. После 6-ой попытки, даётся ответ, но не автовход.
+for(int i =0;!answer.equals("Паладин");i++){
 JOptionPane.showMessageDialog(null,"Страж ворот: Нет. Попробуй ещё раз.");
 if(i==2){
 JOptionPane.showMessageDialog(null,"Подсказка#1: Это название твоего ордена");
@@ -666,7 +671,6 @@ JOptionPane.showMessageDialog(null,"Подсказка#2: Это названи�
 JOptionPane.showMessageDialog(null,"Подсказка#3: Ответ - 'Паладин'");
 }
 answer = JOptionPane.showInputDialog(null,"Я - ...");
-i++;
 }
 JOptionPane.showMessageDialog(null,"Страж ворот: Проходи, добро пожаловать в Немус-Мортем!");
 JOptionPane.showMessageDialog(null,"Ты сразу направляешься к Максимилиану - надо предупредить"
@@ -729,9 +733,9 @@ JOptionPane.showMessageDialog(null, "Дозорные (доклад): На кр�
 }
 if(choose==2){
 JOptionPane.showMessageDialog(null,"Ты инспектируешь свои силы - "
-                                 + "\n"+guardiansLeft/3+ "0 рейнджеров с луками"
-                                 + "\n"+guardiansLeft/3+ "0 копейщиков"
-                                 + "\n"+guardiansLeft/3+ "0 рыцарей,"
+                                 + "\n"+guardiansLeft/3+ " рейнджеров с луками"
+                                 + "\n"+guardiansLeft/3+ " копейщиков"
+                                 + "\n"+guardiansLeft/3+ " рыцарей,"
                                  + "\nне считая тебя, Максимиллиана, и Аврору."
                                  + "\nЭто будет самое тяжёлое сражение в твоей жизни -"
                                  + "\nкаждому из вас придётся биться за троих - только так"
@@ -750,12 +754,10 @@ else{JOptionPane.showMessageDialog(null,"Письма и так высланы, 
 if(choose==4){
     if(!isArmourPikedUp){
 JOptionPane.showMessageDialog(null,name+":Быстро в оружейную - там могут быть припасы!"
-                                      + "\nТы находишь 2 зелья лечения, и прочный шлем,"
-                                      + "\nа так же лёгкую кирасу для Авроры - большая удача -"
-                                      + "\nона может спасти жизнь юной волшебнице!");
-defence = defence+5;
+                                      + "\nТы находишь 2 зелья лечения, и прочный шлем!");
+defence = defence+10;
 potions = potions+2;
-friend_defence = 40;
+isArmourPikedUp = true;
 }else{
 JOptionPane.showMessageDialog(null, "Тут нет больше ничего, что могло бы тебя заинтересовать");
 }
@@ -765,9 +767,12 @@ JOptionPane.showMessageDialog(null,name+":Все на стены, пригото
 }
 }
 //------------------------------------------------------------------------------
+//Цикл продолжается, пока битва не будет выиграна
 while(!isWin){
-monster_hp=monster_base_hp;
-while(goblinsLeft>0&&hp>0&&friend_hp>0){
+monster_hp=monster_base_hp*goblinsLeft;//Жизнь всех гоблинов суммируется в одну переменную
+guardian_hp = guardian_hp*guardiansLeft;//Жизнь всех стражей суммируется в одну переменную
+//Цикл идёт, пока все живы
+while(goblinsLeft>0&&hp>0&&friend_hp>0&&Maximillian_hp>0){
     if(goblinsKilled==(goblinsLeft+goblinsKilled)/3){
     flang="правый";
     JOptionPane.showMessageDialog(null,"Ты и твои воины отбросили врага с левого фланга,"
@@ -784,16 +789,17 @@ choose = Integer.parseInt(JOptionPane.showInputDialog(null,"Противник �
                                                          + "\n4)- Попытаться сбросить со стен вниз"
                                                          + "\n5)- Выпить зелье лечения (x"+potions+")"
                                                          + "\nP.S. Удары латной перчаткой могут оглушить врага."
-                                                         + "\nЕсли Аврора погибнет, компания будет "
-                                                         + "\nпроиграна, солдаты могут быть убиты"));
-AuroraAction=rand.nextInt(6);
-MaximillianAction=rand.nextInt(6);
-GuardianAction=rand.nextInt(3);
+                                                         + "\nЕсли Аврора или Максимиллиан погибнут, компания будет "
+                                                         + "\nпроиграна, солдаты могут быть убиты без последствий,"
+                                                         + "\nэта битва может быть переиграна неограниченное кол-во раз"));
+//Аврора и Максимиллиан генерируют решения
+AuroraAction=rand.nextInt(6)+1;
+MaximillianAction=rand.nextInt(5)+1;
 if(MaximillianAction==1){
-Maximillian_damage = rand.nextInt(10)+5;
+Maximillian_damage = rand.nextInt((int)Maximillian_damage)+5;
 monster_hp = monster_hp - Maximillian_damage;
 JOptionPane.showMessageDialog(null, "Максимиллиан метает в гоблинов огненный шар!"
-                                  + "Противник получил ожоги на "+Maximillian_damage+" урона");
+                                  + "\nПротивник получил ожоги на "+Maximillian_damage+" урона");
 }
 if(MaximillianAction==2&&monster_speed>0){
 Maximillian_damage = rand.nextInt(10)+5;
@@ -801,26 +807,44 @@ monster_hp = monster_hp - Maximillian_damage;
 metadata = rand.nextInt(5);
 monster_speed=monster_speed-metadata;
 JOptionPane.showMessageDialog(null, "Максимиллиан творит заклинание оледенения!"
-                                  + "Противник получил "+Maximillian_damage+" урона,"
-                                  + "и его скорость снижена на "+metadata+"!");
+                                  + "\nПротивник получил "+Maximillian_damage+" урона,"
+                                  + "\nи его скорость снижена на "+metadata+"!");
 }
 if(MaximillianAction==3&&rand.nextInt(10)==1){
     monster_damage=0;
     blocked_damage=0;
 JOptionPane.showMessageDialog(null, "Максимиллиан ослепляет противника ярчайшей вспышкой магии солнца!"
-                                  + "Противник не сможет скоординироватьсят до следующей атаки твоего отряда!");
+                                  + "\nПротивник не сможет скоординироватьсят до следующей атаки твоего отряда!");
 }
 if(MaximillianAction==4){
 Maximillian_damage = rand.nextInt(10)+5;
 monster_hp = monster_hp - Maximillian_damage;
-JOptionPane.showMessageDialog(null, "Максимиллиан рубит врага мечём, нанося ему "+Maximillian_damage+" урона!");
+JOptionPane.showMessageDialog(null, "Максимиллиан рубит врагов мечём, нанося "+Maximillian_damage+" урона!");
 }
-
-if(AuroraAction==1&&hp<85){
-healed_hp = rand.nextInt(7)+3;
+    for(int it = 0;it<guardiansLeft;it++){
+guardian_buffer_damage = rand.nextInt((int)guardian_damage)+5;
+monster_hp = monster_hp - guardian_buffer_damage;
+JOptionPane.showMessageDialog(null, "Твои воины атакуют врага!"
+                                  + "Рыцарь#"+(it+1)+" наносит "+guardian_buffer_damage+" урона!");
+}
+if(AuroraAction==1){
+    healed_hp = rand.nextInt(10) + 5;
+    WhoWasEnchanted = rand.nextInt(2)+1;
+    if(WhoWasEnchanted==1){
 hp = hp + healed_hp;
 JOptionPane.showMessageDialog(null, "Аврора залечивает твои раны!(+"+healed_hp+" жизни)");
-}else if(AuroraAction==1){
+    }if(WhoWasEnchanted==2){
+Maximillian_hp = Maximillian_hp + healed_hp;  
+JOptionPane.showMessageDialog(null, "Аврора лечит магистра Максимиллиана!(+"+healed_hp+" жизни спутника)");
+    }if(WhoWasEnchanted==3){
+guardian_hp = guardian_hp + healed_hp;
+JOptionPane.showMessageDialog(null, "Аврора залечивает раны твоих рыцарей!(+"+healed_hp+" жизни отряда)");
+    }
+healed_hp = rand.nextInt(7)+3;
+friend_hp = friend_hp + healed_hp;
+JOptionPane.showMessageDialog(null, "Аврора заговаривает свои раны на "+(int)healed_hp+"ед. жизни");
+
+} else if (AuroraAction == 7) {
 monster_buffer_attak = monster_attak - monster_attak/2;
 JOptionPane.showMessageDialog(null, "Аврора сотворяет проклятие на противника!"
                                   + "\nЕго атака вдвое ослабла!");
@@ -835,42 +859,114 @@ JOptionPane.showMessageDialog(null, "Аврора замедляет проти�
                                   + "\nЕго шанс увернуться теперь вдвое меньше!");
 }
 else if(AuroraAction==4){
-buffer_speed = speed/3;
+if(WhoWasEnchanted==1){
+buffer_speed = rand.nextInt((int)speed);
 speed = speed + buffer_speed;
 JOptionPane.showMessageDialog(null, "Аврора повышает твой шанс уклониться на "+(int)buffer_speed+"!(до конца боя)");
 }
+else if(WhoWasEnchanted==2){
+buffer_speed = rand.nextInt((int)speed);
+speed = speed + buffer_speed;
+JOptionPane.showMessageDialog(null, "Аврора повышает шанс Максимиллиана уклониться на "+(int)buffer_speed+"!(до конца боя)");
+}
+else if(WhoWasEnchanted==3){
+buffer_speed = rand.nextInt((int)guardian_speed);
+guardian_speed = guardian_speed + buffer_speed;
+JOptionPane.showMessageDialog(null, "Аврора повышает шанс твоих рыцарей уклониться на "+(int)buffer_speed+"!(до конца боя)");
+}
+}
 else if(AuroraAction==5){
+if(WhoWasEnchanted==1){
 buffer_attak = attak/3;
 attak = attak + buffer_attak;
 JOptionPane.showMessageDialog(null, "Аврора повышает твою атаку на "+(int)buffer_attak+"!(до конца боя)");
 }
-else if(AuroraAction==6&& friend_hp<65){
-healed_hp = rand.nextInt(7)+3;
-friend_hp = friend_hp + healed_hp;
-JOptionPane.showMessageDialog(null, "Аврора заговаривает свои раны на "+(int)healed_hp+"ед. жизни");
+if(WhoWasEnchanted==2){
+buffer_attak = guardian_attak/3;
+guardian_attak = guardian_attak + buffer_attak;
+JOptionPane.showMessageDialog(null, "Аврора повышает атаку твоих людей на "+(int)buffer_attak+"!(до конца боя)");
+}
 }
 else if(AuroraAction==6){
+if(WhoWasEnchanted==1){
 buffer_defence = defence/3;
 defence = defence + buffer_defence;
 JOptionPane.showMessageDialog(null, "Аврора повышает прочность твоей брони на "+(int)buffer_attak+"!(до конца боя)");
 }
-isAuroraHitted = rand.nextBoolean();
-if(!isAuroraHitted){
+if(WhoWasEnchanted==2){
+buffer_defence = guardian_defence/3;
+guardian_defence = guardian_defence + buffer_defence;
+JOptionPane.showMessageDialog(null, "Аврора повышает прочность брони твоих людей на "+(int)buffer_attak+"!(до конца боя)");
+}
+}
+//Все гоблины атакуют одновременно, но разные цели
+for(int it = 0; it<goblinsLeft;it++){
+if(WhoWasHitted == 1){
 if(rand.nextInt((int)(100 - speed))!=1){
 monster_current_damage = (monster_attak/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
 monster_blocked_damage = monster_damage*(defence/100);
 hp = hp - (monster_current_damage - monster_blocked_damage);
+JOptionPane.showMessageDialog(null,"Гоблин атакует тебя, и наносит "+monster_current_damage+" урона!\n"
+                             + monster_blocked_damage + " единиц тебе удалось заблокировать, и теперь"
+                             + "\nу тебя осталось "+(int)hp+" жизни!");
     }
  else{
  monster_current_damage = 0;
  monster_blocked_damage = 0;
  JOptionPane.showMessageDialog(null,"Тебе удалось уклонится от кривого меча гоблина!");
  }
-    }else{
+    }
+else if(WhoWasHitted==2){
 monster_current_damage = (monster_buffer_attak/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
 monster_blocked_damage = monster_damage - (rand.nextInt((int)monster_damage));
 friend_hp = friend_hp - (monster_current_damage - monster_blocked_damage);
+JOptionPane.showMessageDialog(null,"Гоблин атакует Аврору Чиаро!"
+                             + "\nОн наносит ей "+(int)monster_current_damage+" урона, \n"
+                             + (int)monster_blocked_damage +" из которых ей удалось блокировать"
+                             + "\nУ неё осталось "+(int)friend_hp+" жизни!");
+}
+else if(WhoWasHitted==3){
+monster_current_damage = (monster_buffer_attak/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
+monster_blocked_damage = monster_damage - (rand.nextInt((int)monster_damage));
+Maximillian_hp = Maximillian_hp - (monster_current_damage - monster_blocked_damage);
+JOptionPane.showMessageDialog(null,"Максимиллиан атакован врагом!"
+                             + "\nОн получает "+(int)monster_current_damage+" урона, но\n"
+                             + (int)monster_blocked_damage +" блокирует магическим щитом"
+                             + "\nУ него теперь "+(int)Maximillian_hp+" жизни!");
+}
+else if(WhoWasHitted==4){
+if(rand.nextInt((int)(100 - speed))!=1){
+monster_current_damage = (monster_buffer_attak/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
+monster_blocked_damage = monster_damage - (rand.nextInt((int)guardian_defence));
+guardian_hp  = guardian_hp - (monster_current_damage - monster_blocked_damage);
+JOptionPane.showMessageDialog(null,"Твои люди атакованы врагом!"
+                             + "\nОни получают "+(int)monster_current_damage+" урона, но\n"
+                             + (int)monster_blocked_damage +" блокируют,"
+                             + "\nУ них"+(int)Maximillian_hp+" жизни!");
+while(monster_current_damage>guardian_hp/goblinsLeft){
+ JOptionPane.showMessageDialog(null,"Один из защитников крепости пал!"
+                                  + "\nВраги заплатят за смерть брата! В атаку!!!"
+                                  + "\nP.S.Стражи Немус-Мортема осталось "+guardiansLeft+" человек");
+}
     }
+ else{
+ monster_current_damage = 0;
+ monster_blocked_damage = 0;
+ JOptionPane.showMessageDialog(null,"Защитник крепости уклоняется от кривого меча гоблина!"); 
+ }
+}
+}}
+for(int it = 0; it<guardiansLeft;it++){
+if(rand.nextInt((int)monster_speed)!=1){
+current_damage = (guardian_attak/100)*damage + rand.nextInt((int)guardian_damage) + 2;
+blocked_damage = current_damage*(monster_defence/100);
+monster_hp = monster_hp - (current_damage - blocked_damage);
+while(current_damage>monster_base_hp){
+ JOptionPane.showMessageDialog(null,"Гоблин мёртв! Осталось "+goblinsLeft+"!");
+}
+}
+
+}
 if(rand.nextInt((int)monster_speed)!=1){
 if(choose==1){
 current_damage = (attak/100)*damage + rand.nextInt((int)damage) + 2;
@@ -931,7 +1027,7 @@ current_damage = 0;
 blocked_damage = 0;
 JOptionPane.showMessageDialog(null,"Гоблин увернулся от удара!");
 }
-if(!isAuroraHitted){
+if(WhoWasHitted == 1){
 JOptionPane.showMessageDialog(null,"Ты нанёс "+(int)current_damage+" урона,"
                                  + "\nПротивник нанёс тебе "+(int)monster_current_damage+" урона,"
                                  + "\nИз них ты заблокировал " + (int)monster_blocked_damage+" урона"
@@ -978,7 +1074,6 @@ JOptionPane.showMessageDialog(null,"Ты пропустил удар, и чёр�
 }
         }
     }
-}
 
 
 
