@@ -1,4 +1,4 @@
-package paladin;
+﻿package paladin;
 
 import java.util.Random;
 import javax.swing.JOptionPane;
@@ -453,8 +453,8 @@ JOptionPane.showMessageDialog(null, "Аврора повышает прочно�
 //В зависимости от того, кто был атакован, ты или Аврора получаете урон
 if(WhoWasHitted==1){
 if(rand.nextInt((int)(100 - speed))!=1){
-monster_current_damage = (monster_attak-monster_buffer_attak/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
-monster_blocked_damage = monster_damage*(defence+buffer_defence/100);
+monster_current_damage = ((monster_attak-monster_buffer_attak)/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
+monster_blocked_damage = monster_damage*((defence+buffer_defence)/100);
 hp = hp - (monster_current_damage - monster_blocked_damage);
     }
  else{
@@ -463,14 +463,14 @@ hp = hp - (monster_current_damage - monster_blocked_damage);
  JOptionPane.showMessageDialog(null,"Тебе удалось уклонится от кривого меча гоблина!");
  }
     }else{
-monster_current_damage = (monster_attak-monster_buffer_attak/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
+monster_current_damage = ((monster_attak-monster_buffer_attak)/100)*monster_damage + rand.nextInt((int)monster_damage) + 2;
 monster_blocked_damage = monster_damage - (rand.nextInt((int)monster_damage));
 friend_hp = friend_hp - (monster_current_damage - monster_blocked_damage);
     }
 if(rand.nextInt((int)monster_speed)!=1){
 if(choose==1){
-current_damage = (attak+buffer_attak/100)*damage + rand.nextInt((int)damage) + 2;
-blocked_damage = current_damage*(monster_defence-monster_buffer_defence/100);
+current_damage = ((attak+buffer_attak)/100)*damage + rand.nextInt((int)damage) + 2;
+blocked_damage = current_damage*((monster_defence-monster_buffer_defence)/100);
 monster_hp = monster_hp - (current_damage - blocked_damage);
 }
 if(choose==2){
@@ -488,7 +488,7 @@ monster_hp = monster_hp - (current_damage - blocked_damage);
 }
 }
 if(choose == 3){
-monster_current_damage = rand.nextInt(((int)(hp/2 - hp*defence+buffer_defence/100)));
+monster_current_damage = rand.nextInt(((int)(hp/2 - hp*(defence+buffer_defence)/100)));
 current_damage = rand.nextInt((int)monster_hp);
 JOptionPane.showMessageDialog(null,"В последний момент ты закрываешь Аврору щитом,"
                                  + "\nа после стремительно контратакуешь!"
@@ -769,7 +769,7 @@ while(goblinsLeft>0&&hp>0&&friend_hp>0&&Maximillian_hp>0){
     JOptionPane.showMessageDialog(null,"Правый фланг зачищен, осталось оборонять ворота, и отбросить гоблинов,"
                                      + "\nраньше того момента, как подойдёт их огр!");
     }
-choose = Integer.parseInt(JOptionPane.showInputDialog(null,"Противник штурмует "+flang+" фланг!" 
+choose = Integer.parseInt(JOptionPane.showInputDialog(null,"Противник штурмует "+flang+" фланг!"
                                                          + "\n1)- Атаковать мечём"
                                                          + "\n2)- Раскидывать врагов латной перчаткой"
                                                          + "\n3)- Защищать своих людей щитом от стрел"
@@ -815,7 +815,7 @@ if(AuroraAction==1){
 hp = hp + healed_hp;
 JOptionPane.showMessageDialog(null, "Аврора залечивает твои раны!(+"+(int)healed_hp+" жизни)");
     }if(WhoWasEnchanted==2){
-Maximillian_hp = Maximillian_hp + healed_hp;  
+Maximillian_hp = Maximillian_hp + healed_hp;
 JOptionPane.showMessageDialog(null, "Аврора лечит магистра Максимиллиана!(+"+(int)healed_hp+" жизни спутника)");
     }if(WhoWasEnchanted==3){
 guardian_hp = guardian_hp + healed_hp;
@@ -934,7 +934,7 @@ while(monster_current_damage>guardian_hp/guardiansLeft){
  else{
  monster_current_damage = 0;
  monster_blocked_damage = 0;
- JOptionPane.showMessageDialog(null,"Защитник крепости уклоняется от кривого меча гоблина!"); 
+ JOptionPane.showMessageDialog(null,"Защитник крепости уклоняется от кривого меча гоблина!");
  }
 }
 }
@@ -1051,7 +1051,7 @@ JOptionPane.showMessageDialog(null,"Ты пропустил удар, и чёр�
                                  + "\nтебя. Последнее, что ты слышишь - крик Авроры."
                                  + "\nО Солнце и Звёзды.. "
                                  + "\nПопробуй ещё раз, ладно?");
-}    
+}
 }
 if(Maximillian_hp<0){
 JOptionPane.showMessageDialog(null,"Магистр Максимиллиан, защитник границы и крепости Немус-Мортем,"
